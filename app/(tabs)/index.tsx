@@ -2,19 +2,59 @@ import { StyleSheet } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
+import { Calendar, DateData } from "react-native-calendars";
+import { useEffect, useState } from "react";
 
 export default function TabOneScreen() {
+  const [dateSelected, setDaySelected] = useState<DateData>();
+
+  function handleSelectDate(day: DateData) {
+    console.log("Clicked", day);
+    // if clicked again unselect date
+    if (day.day == dateSelected?.day) {
+      console.log("Same date");
+      setDaySelected(undefined);
+    } else {
+      setDaySelected(day);
+    }
+  }
+
+  useEffect(() => {}, [dateSelected]);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title} className="text-red-400">
-        Tab One
-      </Text>
+    <View className="flex flex-col h-screen justify-start items-center">
+      <Calendar
+        className="w-screen rounded-md shadow-md p-2"
+        onDayPress={(day) => handleSelectDate(day)}
+        onDayLongPress={(day) => console.log("onDayLongPress", day)}
+        onMonthChange={(date) => console.log("onMonthChange", date)}
+        markedDates={{
+          [dateSelected?.dateString as string]: {
+            selected: true,
+            disableTouchEvent: false,
+          },
+        }}
+        onPressArrowLeft={(goToPreviousMonth) => {
+          console.log("onPressArrowLeft");
+          goToPreviousMonth();
+        }}
+        onPressArrowRight={(goToNextMonth) => {
+          console.log("onPressArrowRight");
+          goToNextMonth();
+        }}
+      />
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+
+      <View className="w-screen shadow-md p-2 rounded-md h-48">
+        <Text className="font-bold text-lg w-[80%]">
+          Notes: {dateSelected ? dateSelected.dateString : "No date selected"}
+        </Text>
+      </View>
+
+      {/* <EditScreenInfo path="app/(tabs)/index.tsx" /> */}
     </View>
   );
 }
@@ -30,7 +70,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   separator: {
-    marginVertical: 30,
+    marginVertical: 15,
     height: 1,
     width: "80%",
   },
