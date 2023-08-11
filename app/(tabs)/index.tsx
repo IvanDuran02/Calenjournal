@@ -48,7 +48,7 @@ export default function TabOneScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
 
-      <View className="w-screen shadow-md p-2 rounded-md h-48">
+      <View className="w-screen shadow-md p-2 rounded-md h-52">
         <Text className="font-bold text-lg w-[80%]">
           Notes: {dateSelected ? dateSelected.dateString : "No date selected"}
         </Text>
